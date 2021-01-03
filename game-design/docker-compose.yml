@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  pg:
+    image: postgres:11-alpine
+    restart: always
+    volumes:
+      - ./pg-data:/var/lib/postgresql/learnify_game_dev
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: learnify_game_dev
