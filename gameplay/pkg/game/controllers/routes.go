@@ -7,7 +7,7 @@ import (
 )
 
 func Load(app *fiber.App, gameRepo storage.GameRepository, quizSrv services.QuizService) {
-	ctrl := NewCreateGameController(gameRepo, quizSrv)
+	ctrl := NewGameController(gameRepo, quizSrv)
 
 	gameGroup := app.Group("/game")
 	gameGroup.Post("/", ctrl.CreateGame)

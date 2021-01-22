@@ -5,7 +5,6 @@ import (
 	"path/filepath"
 
 	"github.com/go-pg/pg/v10"
-	"github.com/google/uuid"
 	"github.com/rcmendes/learnify/gameplay/internal/storage/postgres"
 )
 
@@ -15,8 +14,9 @@ type QuizList []Quiz
 //QuizRepository defines the contract of a Quiz entity repository.
 type QuizRepository interface {
 	ListAll() (*QuizList, error)
-	ListQuizzesByCategory(category string) (*QuizList, error)
-	GetQuizByUUID(uuid uuid.UUID) (*Quiz, error)
+	FindQuizzesByCategory(category string) (*QuizList, error)
+	GetQuizByID(id QuizID) (*Quiz, error)
+	FindQuizzesSameCategory(id QuizID) (*QuizList, error)
 }
 
 //ImageRepository defines the contract of an Image Repository.
@@ -59,7 +59,7 @@ func (repo *quizRepository) ListAll() (*QuizList, error) {
 	return &quizzes, nil
 }
 
-func (repo *quizRepository) ListQuizzesByCategory(category string) (*QuizList, error) {
+func (repo *quizRepository) FindQuizzesByCategory(category string) (*QuizList, error) {
 	conn := repo.connectFn()
 	defer conn.Close()
 
@@ -75,7 +75,31 @@ func (repo *quizRepository) ListQuizzesByCategory(category string) (*QuizList, e
 	return &quizzes, nil
 }
 
-func (repo *quizRepository) GetQuizByUUID(id uuid.UUID) (*Quiz, error) {
+func (repo *quizRepository) FindQuizzesSameCategory(id QuizID) (*QuizList, error) {
+	conn := repo.connectFn()
+	defer conn.Close()
+
+	//TODO improve this code for better performance. 2 Queries => 1 query.
+
+	// TODO refactor for handle error
+	quiz, err := repo.GetQuizByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	var quizzes QuizList
+
+	if err := conn.Model(&quizzes).
+		Where("category = ?", quiz.Category).
+		Select(); err != nil {
+
+		return nil, err
+	}
+
+	return &quizzes, nil
+}
+
+func (repo *quizRepository) GetQuizByID(id QuizID) (*Quiz, error) {
 	conn := repo.connectFn()
 	defer conn.Close()
 

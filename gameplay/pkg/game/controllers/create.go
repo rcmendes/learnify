@@ -9,12 +9,12 @@ import (
 
 //GameController defines the services provided by the game API.
 type GameController struct {
-	uc ucs.CreateGameUC
+	uc ucs.GameUC
 }
 
-func NewCreateGameController(gameRepo storage.GameRepository, quizSrv services.QuizService) *GameController {
+func NewGameController(gameRepo storage.GameRepository, quizSrv services.QuizService) *GameController {
 	return &GameController{
-		uc: ucs.NewCreateGameUC(gameRepo, quizSrv),
+		uc: ucs.NewGameUC(gameRepo, quizSrv),
 	}
 
 }

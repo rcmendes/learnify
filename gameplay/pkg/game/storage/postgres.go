@@ -8,6 +8,7 @@ import (
 
 type GameRepository interface {
 	Insert(game Game) (*GameID, error)
+	GetByID(id GameID) (*Game, error)
 	// Update(id GameID, game Game) error
 }
 

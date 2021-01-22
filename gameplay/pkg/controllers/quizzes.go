@@ -90,7 +90,7 @@ func (controller *quizController) FindOneByUUID(c *fiber.Ctx) error {
 		return err
 	}
 
-	quiz, err := controller.quizSrv.GetQuizByUUID(uuid)
+	quiz, err := controller.quizSrv.GetQuizByID(uuid)
 	if err != nil {
 		//TODO handle error
 		return err

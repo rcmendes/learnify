@@ -19,12 +19,16 @@ type QuizDTO struct {
 	imageFilename string
 }
 
+type QuizID = uuid.UUID
+type ImageID = uuid.UUID
+
 //QuizService defines the contract of functions provided by a Quiz service.
 type QuizService interface {
 	ListAll() (*[]QuizDTO, error)
 	ListQuizzesByCategory(category string) (*[]QuizDTO, error)
-	GetQuizByUUID(uuid uuid.UUID) (*QuizDTO, error)
-	GetImageByUUID(uuid uuid.UUID) (*[]byte, error)
+	GetQuizByID(id QuizID) (*QuizDTO, error)
+	GetImageByUUID(id ImageID) (*[]byte, error)
+	FindQuizzesSameCategory(id QuizID) (*[]QuizDTO, error)
 }
 
 type quizService struct {
@@ -88,7 +92,7 @@ func (svc *quizService) ListAll() (*[]QuizDTO, error) {
 }
 
 func (svc *quizService) ListQuizzesByCategory(category string) (*[]QuizDTO, error) {
-	list, err := svc.quizRepo.ListQuizzesByCategory(category)
+	list, err := svc.quizRepo.FindQuizzesByCategory(category)
 
 	if err != nil {
 		return nil, err
@@ -99,8 +103,8 @@ func (svc *quizService) ListQuizzesByCategory(category string) (*[]QuizDTO, erro
 	return &quizzes, nil
 }
 
-func (svc *quizService) GetQuizByUUID(id uuid.UUID) (*QuizDTO, error) {
-	quiz, err := svc.quizRepo.GetQuizByUUID(id)
+func (svc *quizService) GetQuizByID(id QuizID) (*QuizDTO, error) {
+	quiz, err := svc.quizRepo.GetQuizByID(id)
 
 	if err != nil {
 		return nil, err
@@ -121,8 +125,8 @@ func convertQuizListToQuizDTOList(list storage.QuizList) []QuizDTO {
 	return quizzes
 }
 
-func (svc *quizService) GetImageByUUID(id uuid.UUID) (*[]byte, error) {
-	quiz, err := svc.quizRepo.GetQuizByUUID(id)
+func (svc *quizService) GetImageByUUID(id ImageID) (*[]byte, error) {
+	quiz, err := svc.quizRepo.GetQuizByID(id)
 
 	if err != nil {
 		//TODO handle error
@@ -137,4 +141,16 @@ func (svc *quizService) GetImageByUUID(id uuid.UUID) (*[]byte, error) {
 	}
 
 	return image, nil
+}
+
+func (svc *quizService) FindQuizzesSameCategory(id QuizID) (*[]QuizDTO, error) {
+	list, err := svc.quizRepo.FindQuizzesSameCategory(id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	quizzes := convertQuizListToQuizDTOList(*list)
+
+	return &quizzes, nil
 }

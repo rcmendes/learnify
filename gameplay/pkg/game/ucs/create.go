@@ -6,37 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/rcmendes/learnify/gameplay/pkg/game/storage"
-	"github.com/rcmendes/learnify/gameplay/pkg/services"
 )
-
-// type ImageUUID = uuid.UUID
-// type AudioURL = string
-
-// type GameQuiz struct {
-// 	Audio    AudioURL  `json:"audio_url"`
-// 	Question string    `json:"question"`
-// 	AnswerID ImageUUID `json:"answer"`
-// 	Options  []uuid.UUID
-// }
-
-//CreateGameUC defines  a Create Game Use Case handler.
-type CreateGameUC interface {
-	Create(category string, quizzes int) (*GameID, error)
-	// Finish(uuid uuid.UUID) error
-}
-
-type gameUC struct {
-	gameRepo storage.GameRepository
-	quizSrv  services.QuizService
-}
-
-//NewCreateGameUC creates a Create Game Use Case handler.
-func NewCreateGameUC(gameRepo storage.GameRepository, quizSrv services.QuizService) CreateGameUC {
-	return &gameUC{
-		gameRepo: gameRepo,
-		quizSrv:  quizSrv,
-	}
-}
 
 func (uc *gameUC) Create(category string, quizzesNumber int) (*GameID, error) {
 
