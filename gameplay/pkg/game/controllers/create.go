@@ -2,27 +2,15 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/rcmendes/learnify/gameplay/pkg/game/storage"
-	"github.com/rcmendes/learnify/gameplay/pkg/game/ucs"
-	"github.com/rcmendes/learnify/gameplay/pkg/services"
+	"github.com/google/uuid"
 )
 
-//GameController defines the services provided by the game API.
-type GameController struct {
-	uc ucs.GameUC
-}
-
-func NewGameController(gameRepo storage.GameRepository, quizSrv services.QuizService) *GameController {
-	return &GameController{
-		uc: ucs.NewGameUC(gameRepo, quizSrv),
-	}
-
-}
+//PlayerID defines the ID of a player
+type PlayerID = uuid.UUID
 
 type createGameRequest struct {
 	Category string `json:"category"`
-	Quizzes  int    `json:"quizzes"`
-	// player string
+	// PlayerID PlayerID
 
 }
 
@@ -38,7 +26,7 @@ func (ctrl *GameController) CreateGame(c *fiber.Ctx) error {
 		return fiber.ErrBadRequest
 	}
 
-	id, err := ctrl.uc.Create(request.Category, request.Quizzes)
+	// id, err := ctrl.uc.Create(request.Category, request.Quizzes)
 
 	if err != nil {
 		//TODO Handle Error
@@ -46,5 +34,5 @@ func (ctrl *GameController) CreateGame(c *fiber.Ctx) error {
 	}
 
 	//TODO replace for a struct and a 201
-	return c.SendString((*id).String())
+	return c.SendString.Category).String())
 }

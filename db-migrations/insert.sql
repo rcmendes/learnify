@@ -1,57 +1,57 @@
-insert into quizzes(url, tag, palavra, mot, audio) VALUES
-('https://www.criandocomapego.com/wp-content/uploads/2018/11/fichas-das-emocoes-para-imprimir-alegria.jpg','sentimentos','heureux','alegre','Il a heureux'),
-('https://www.criandocomapego.com/wp-content/uploads/2018/11/fichas-das-emocoes-para-imprimir-raiva.jpg','sentimentos','rage','raiva','Il a rage'),
-('https://www.criandocomapego.com/wp-content/uploads/2018/11/fichas-das-emocoes-para-imprimir-tristeza.jpg','sentimentos','triste','triste','Il a triste'),
-('https://www.criandocomapego.com/wp-content/uploads/2018/11/fichas-das-emocoes-para-imprimir-medo.jpg','sentimentos','peur','medo','Il a peur'),
-('https://image.freepik.com/free-vector/cute-boy-sleepy_33070-1825.jpg','sentimentos','sommeil','sono','Il a sommeil'),
-('https://www.criandocomapego.com/wp-content/uploads/2018/11/fichas-das-emocoes-para-imprimir-calma.jpg','sentimentos','calme','calmo','Il a calme'),
-('https://how2drawanimals.com/images/CartoonCat/draw-cartoon-kitten-cat-kitty-thumb.jpg','animais','chat','gato','le chat'),
-('','vestuário','robe','vestido','la robe'),
-('https://cdn3.vectorstock.com/i/1000x1000/75/47/black-color-splash-vector-1097547.jpg','cores','noir ','preto','noir'),
-('https://thumbs.dreamstime.com/b/color-image-cartoon-oranges-white-background-fruits-vector-illustration-165217615.jpg','frutas','orange','laranja','l''orange'),
-('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQhVYavbmxaprx3dvCGkaD6grjgUQlnF-lwbA&usqp=CAU','animais','requin','tubarão','le requin'),
-('https://lh3.googleusercontent.com/proxy/GQnxCEACtRpddIZS4JY83amYRbTofbiz97O5weKMr900gS91HPr03k1OuxAbu0awwNDyipb8df8LS18pPeOBVakj5IR0OW9DK4k0W7-ij000Vh-9RqPllTpGoKk08QoJ5AuaeQ','vestuário','vètement','roupa',''),
-('https://i.pinimg.com/originals/d2/16/e5/d216e5c5b7e7fef30c79057cd2d85222.jpg','vestuário','sac','bolsa','le sac'),
-('https://image.freepik.com/free-vector/cute-boy-cartoon_33070-2118.jpg','pessoas','garçon','menino','le garçon'),
-('https://image.freepik.com/free-vector/brunette-woman-character_23-2147502479.jpg','pessoas','femme','mulher','la femme'),
-('https://www.netclipart.com/pp/m/110-1103220_paintball-splat-cliparts-paint-splash-cartoon.png','cores','vert','verde',''),
-('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSIStIzlQlMJTKljn8WP1H23TZDhIC4DdrZ9Q&usqp=CAU','cores','bleu','azul',''),
-('https://freesvg.org/img/mealplate.png','alimentos','repas','refeição',''),
-('https://image.freepik.com/free-vector/cute-little-dog-cartoon-isolated-white_143596-3.jpg','animais','chien','cachorro','le chien'),
-('https://www.clipartkey.com/mpngs/m/137-1378551_commerce-vector-cartoon-business-man-hq-image-free.png','pessoas','homme','homem','le homme'),
-('https://st.depositphotos.com/2400497/2883/v/450/depositphotos_28833263-stock-illustration-cartoon-girl-eating.jpg','ações','manger','comer',''),
-('https://i.dlpng.com/static/png/6540632_preview.png','cores','blanche','branco',''),
-('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR48hDZWbUuKtN3CARMhGJSuNSbaoRivbwNmQ&usqp=CAU','frutas','pomme','maçã',''),
-('https://lh3.googleusercontent.com/proxy/5LhEMMQv-oEvlCa0l5wJzxmtm7NsOniMskJ0Q_Fl9-M2KQffbEAHKOFp2Wo1at1JwMMd9jKNNOQqbMO13kT012GEz9thKumcE5rYsoJq6De1odriP0lqjH2jcsfFgCg','objetos','livre','livro',''),
-('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRMYzZ1HDRi41Sm1CsD89cOfQZL_wX-UYZPfg&usqp=CAU','frutas','citron','limão',''),
-('https://img.freepik.com/free-vector/milk-tetrabrick_51188-5.jpg?size=338&ext=jpg','alimentos','lait','leite',''),
-('https://image.shutterstock.com/image-vector/child-drinking-water-vector-illustration-260nw-330125195.jpg','ações','-','beber',''),
-('https://i.pinimg.com/736x/2f/68/23/2f68236fdffd49cf8854f254aad5e910.jpg','ações','-','dormir',''),
-('https://www.pngitem.com/pimgs/m/532-5322872_kids-play-png-transparent-cartoons-cartoon-images-of.png','ações','-','brincar',''),
-('https://cdn2.vectorstock.com/i/1000x1000/46/11/little-boy-cartoon-walking-vector-4414611.jpg','ações','-','caminhar',''),
-('https://cdn5.vectorstock.com/i/1000x1000/12/44/kid-sitting-on-chair-vector-20551244.jpg','ações','-','sentar',''),
-('https://cdn4.vectorstock.com/i/1000x1000/05/33/flat-denim-jeans-icon-vector-18960533.jpg','vestuário','pantalon','calça','le pantalon'),
-('https://image.shutterstock.com/image-vector/yellow-sneakers-vector-isolated-260nw-569243245.jpg','vestuário','chaussure','sapato',''),
-('','objetos','lettres','cartas',''),
-('https://www.clipartkey.com/mpngs/m/144-1449759_drop-clip-art-colours-red-splodge.png','cores','rouge','vermelho',''),
-('https://images-na.ssl-images-amazon.com/images/I/710bPncUkKL._AC_SL1500_.jpg','animais','poisson','peixe',''),
-('https://www.netclipart.com/pp/m/27-270944_cooked-turkey-clipart-black-and-white-cooked-meat.png','alimentos','boeuf','carne',''),
-('','adjetivos','leve','légère',''),
-('https://fsb.zobj.net/crop.php?r=67k5Vxa6DCKDWWgyQNyW3GnT5upfIpkb9Qg1gWle4ZBJOD1xWq9bMGjh4odEw0KAZ_e5L240kFb_3XZNxbKQB4NFO29FlWPELo-lpDZnfPMkpsu6vCdbLVPij1gJ5NFouLCsoP_m7mkp6Q4m','ações','aime','gostar','j''aime'),
-('https://cdn2.f-cdn.com/contestentries/1458359/21383270/5c0fca8e25198_thumb900.jpg','pessoas','fille','menina',''),
-('https://image.freepik.com/free-vector/kid-drawing-vector-illustration-isolated_97632-299.jpg','ações','dessiner','desenhar',''),
-('https://thumbs.dreamstime.com/b/two-little-kids-talking-counting-fingers-two-little-kids-boy-girl-pink-talking-being-friends-180131114.jpg','ações','parle','falar',''),
-('https://i.pinimg.com/originals/90/c8/7c/90c87cb3d02f23c2a33e5b8786788e95.jpg','alimentos','sandwich','sanduiche','Le sandwich'),
-('https://png.pngtree.com/element_our/20190602/ourlarge/pngtree-yellow-cheese-cartoon-illustration-image_1423401.jpg','alimentos','fromage','queijo',''),
-('https://thumbs.dreamstime.com/b/cenoura-dos-desenhos-animados-110455651.jpg','alimentos','carotte','cenoura',''),
-('https://image.freepik.com/free-vector/grapes-cartoon-icon_90744-153.jpg','frutas','raisin','uva','le raisin'),
-('https://i.pinimg.com/736x/ca/ff/ac/caffac214721104ab6a7a76ecda33aec.jpg','alimentos','chocolat','chocolate','le chocolat'),
-('','alimentos','oeuf','ovo',''),
-('https://cdn4.vectorstock.com/i/1000x1000/50/33/multi-ethnic-group-of-children-forming-a-circle-vector-6725033.jpg','pessoas','enfant','criança',''),
-('https://www.jing.fm/clipimg/detail/4-43044_loaf-bread-png-clip-art-clip-art-loaf.png','alimentos','baguette','pão',''),
-('https://image.freepik.com/free-vector/cute-smiling-happy-glass-water-drop-flat-cartoon-character-illustration-isolated-white-background-water-drop-character-concept_92289-1426.jpg','alimentos','l''eau','água',''),
-('https://image.freepik.com/free-vector/cartoon-brown-horse-isolated-white_29190-5049.jpg','animais','cheval','cavalo',''),
-('https://i.pinimg.com/736x/62/b7/fb/62b7fb57ec0e461b6daf6a928edc87ee.jpg','animais','papillon ','borboleta',''),
-('https://image.freepik.com/free-vector/adorable-dolphin-cartoon_74769-37.jpg','animais','dauphin','golfinho',''),
-('https://image.freepik.com/free-vector/cute-mouse-cartoon-presenting_160606-84.jpg','animais','souris','rato',''),
-('https://image.freepik.com/free-vector/happy-elephant-cartoon_160606-95.jpg','animais','éléphant','elefante','');
+"uuid", "category","palavra","mot","image_filename", "audio_filename"
+"bebbb5c9-ffe6-4bce-b4ab-b98fe0504757","sentimentos","alegre","heureux","alegre.jpg","Il a heureux"
+"4e2d6ae6-ec0b-4700-ab56-a3e32c53941f","cores","azul","bleu","azul.png",""
+"d2a71f4e-535f-404f-bc7e-3da8a8b5e106","ações","beber","-","beber.jpg",""
+"33bc0a49-a7cb-4773-99f0-12ef8d73f5cb","vestuário","bolsa","sac","bolsa.jpg","le sac"
+"88deffe2-fa69-4cec-aba7-694699213657","animais","borboleta","papillon ","borboleta.jpg",""
+"f11af346-a529-4bc6-bdef-89cf06498aaa","cores","branco","blanche","branco.png",""
+"81f9221c-6709-4670-8cc6-d2b1313bf599","ações","brincar","-","brincar.png",""
+"d1196953-242f-42df-8d7f-e1d77f839e12","animais","cachorro","chien","cachorro.jpg","le chien"
+"9dd732d4-7421-4e09-8ec9-fa5dff4d2064","sentimentos","calmo","calme","calmo.jpg","Il a calme"
+"381c3127-08b7-4ab8-989a-9577dcd12605","vestuário","calça","pantalon","calça.png","le pantalon"
+"5a2eb123-8c72-4be9-88ac-3bf93e9d2817","ações","caminhar","promenader","caminhar.png",""
+"8ed02b9c-be8b-45e9-bc5f-deaec603a5a3","alimentos","carne","boeuf","carne.png",""
+"edb2d288-9be7-4d7e-80e0-5b73f3dd38f1","objetos","cartas","lettres","cartas.png",""
+"7479c993-2bb3-4134-b055-63566bfefbec","animais","cavalo","cheval","cavalo.jpg",""
+"c9f56a1a-e95e-4ef6-a2b1-cebf85a90404","alimentos","cenoura","carotte","cenoura.jpg",""
+"b280dff8-6f53-4ae3-9385-2c4ca56677c7","alimentos","chocolate","chocolat","chocolate.jpg","le chocolat"
+"5a2d9fb0-2a50-4d42-a371-c70916dae3ea","ações","comer","manger","comer.jpg",""
+"2dc298ec-0170-4dc6-871e-27fa514a9584","pessoas","criança","enfant","criança.png",""
+"d169efe0-54d1-4335-8e55-fd884c56bce6","ações","desenhar","dessiner","desenhar.jpg",""
+"dbf3ecc6-ed24-46be-814e-a2e19ff7b88b","ações","dormir","-","dormir.jpg",""
+"ff689310-47ea-4e98-9ece-266ae7e8588f","animais","elefante","éléphant","elefante.jpg",""
+"0224afa9-ad94-46aa-a184-ad92ff8ee6dd","ações","falar","parle","falar.jpg",""
+"55115194-3db6-41c9-b8b6-b95c88f035ad","animais","gato","chat","gato.jpg","le chat"
+"6051d3bf-bf5b-453c-99e6-a2070d524bc1","animais","golfinho","dauphin","golfinho.jpg",""
+"ea83cc2c-87f7-4a5e-be3b-5636d71a6269","ações","gostar","aime","gostar.jpg","j'aime"
+"3adc5e90-0c66-44bd-b28a-eb5542f56963","pessoas","homem","homme","homem.png","le homme"
+"17fabf5b-fd71-4961-be2c-9763997ec699","frutas","laranja","orange","laranja.jpg","l'orange"
+"a5a24a80-dcdf-44e3-9a44-ecf18571c79d","alimentos","leite","lait","leite.jpg",""
+"aff44d57-9cbf-4007-b82b-c6d06f21dbad","adjetivos","leve","légère","leve.jpg",""
+"f52a3c16-85ef-4eb3-a9ee-005125ca2126","frutas","limão","citron","limão.jpg",""
+"15e2b032-5178-483f-8204-66428b3cce43","objetos","livro","livre","livro.png",""
+"9a8378b3-b0ba-4993-84ab-06536895da4f","frutas","maçã","pomme","maçã.jpg",""
+"591e0fae-d2e0-4895-a3c7-cb576404fa68","sentimentos","medo","peur","medo.jpg","Il a peur"
+"055158ab-477e-4b00-81b2-added11cdd39","pessoas","menina","fille","menina.jpg",""
+"0d3097e6-24f0-48d6-90e4-c91e17a497df","pessoas","menino","garçon","menino.jpg","le garçon"
+"a1dc1997-405c-4047-be7e-e8a2e9e761b4","pessoas","mulher","femme","mulher.jpg","la femme"
+"af67dd26-3fc9-4c8d-b5db-8e2976cc87b8","alimentos","ovo","oeuf","ovo.png",""
+"8633af8e-9c62-4fb5-9d2f-5bd049697265","animais","peixe","poisson","peixe.jpg",""
+"188254ed-0a44-482f-b18c-1f0d045d512a","cores","preto","noir ","preto.png","noir"
+"794bd978-411e-41c5-92ca-eb8bc4b3f06e","alimentos","pão","baguette","pão.png",""
+"41d0e83e-4d92-4d95-8f59-f90192bc3304","alimentos","queijo","fromage","queijo.jpg",""
+"2053ca92-df2d-4c29-b2b2-97cb8f6f9007","sentimentos","raiva","rage","raiva.jpg","Il a rage"
+"2252aef9-6bc0-4fda-aaaf-3b87ede9e3c8","animais","rato","souris","rato.jpg",""
+"44751589-63dd-4407-af13-eef5f367488f","alimentos","refeição","repas","refeição.png",""
+"3a94313b-2e97-4a18-b7b6-2d882a7d765f","vestuário","roupa","vètement","roupa.png",""
+"9eac927d-d99e-4525-bbc0-d334a3aedf3f","alimentos","sanduiche","sandwich","sanduiche.jpg","Le sandwich"
+"2647abbc-39fb-4228-826d-08ebcdac2d0d","vestuário","sapato","chaussure","sapato.jpg",""
+"5f018c0a-695c-4c17-8c12-af0f443f914b","ações","sentar","assesoir","sentar.png",""
+"0703f85e-8230-47fa-a3b1-ca9110d79edd","sentimentos","sono","sommeil","sono.jpg","Il a sommeil"
+"c292c2d4-ce8c-4832-8965-9366166b7534","sentimentos","triste","triste","triste.jpg","Il a triste"
+"dd16a685-bbfe-4489-b018-6fc64cd8a042","animais","tubarão","requin","tubarão.jpg","le requin"
+"079f809c-9d08-4050-82a9-85e8237c2e64","frutas","uva","raisin","uva.jpg","le raisin"
+"53b10de0-5b16-4e10-aabb-c28bda3a7ca5","cores","verde","vert","verde.png",""
+"b08755d3-1b77-4157-9784-b04d111b5eba","cores","vermelho","rouge","vermelho.png",""
+"14275a4a-0f04-4b84-9063-33a0f495f724","vestuário","vestido","robe","vestido.png","la robe"
+"daf92611-9a02-4792-a080-fb98eaf0d9e0","alimentos","água","l'eau","água.jpg",""

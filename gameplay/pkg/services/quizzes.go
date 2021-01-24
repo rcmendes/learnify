@@ -20,31 +20,14 @@ type QuizDTO struct {
 }
 
 type QuizID = uuid.UUID
-type ImageID = uuid.UUID
 
 //QuizService defines the contract of functions provided by a Quiz service.
 type QuizService interface {
 	ListAll() (*[]QuizDTO, error)
 	ListQuizzesByCategory(category string) (*[]QuizDTO, error)
 	GetQuizByID(id QuizID) (*QuizDTO, error)
-	GetImageByUUID(id ImageID) (*[]byte, error)
+	GetQuizImageByID(id QuizID) (*[]byte, error)
 	FindQuizzesSameCategory(id QuizID) (*[]QuizDTO, error)
-}
-
-type quizService struct {
-	quizRepo  storage.QuizRepository
-	imageRepo storage.ImageRepository
-}
-
-func buildQuizDTOFrom(quiz storage.Quiz) QuizDTO {
-	return QuizDTO{
-		ID:            quiz.ID,
-		imageFilename: quiz.ImageFilename,
-		Category:      quiz.Category,
-		Palavra:       quiz.Palavra,
-		Mot:           quiz.Mot,
-		audioFilename: quiz.AudioFilename,
-	}
 }
 
 //BuildImageURL build the QuizDTO image URL from the contextPath.
@@ -67,6 +50,22 @@ func (dto *QuizDTO) BuildAudioURL(contextPath string) error {
 	dto.AudioURL = contextPath + dto.ID.String() + "/image"
 
 	return nil
+}
+
+type quizService struct {
+	quizRepo  storage.QuizRepository
+	imageRepo storage.ImageRepository
+}
+
+func buildQuizDTOFrom(quiz storage.Quiz) QuizDTO {
+	return QuizDTO{
+		ID:            quiz.ID,
+		imageFilename: quiz.ImageFilename,
+		Category:      quiz.Category,
+		Palavra:       quiz.Palavra,
+		Mot:           quiz.Mot,
+		audioFilename: quiz.AudioFilename,
+	}
 }
 
 //TODO Handle errors or create custom ones.
@@ -125,24 +124,6 @@ func convertQuizListToQuizDTOList(list storage.QuizList) []QuizDTO {
 	return quizzes
 }
 
-func (svc *quizService) GetImageByUUID(id ImageID) (*[]byte, error) {
-	quiz, err := svc.quizRepo.GetQuizByID(id)
-
-	if err != nil {
-		//TODO handle error
-		return nil, err
-	}
-
-	image, err := svc.imageRepo.GetImageByID(quiz.ImageFilename)
-
-	if err != nil {
-		//TODO Handle error (wrap???)
-		return nil, err
-	}
-
-	return image, nil
-}
-
 func (svc *quizService) FindQuizzesSameCategory(id QuizID) (*[]QuizDTO, error) {
 	list, err := svc.quizRepo.FindQuizzesSameCategory(id)
 
@@ -153,4 +134,22 @@ func (svc *quizService) FindQuizzesSameCategory(id QuizID) (*[]QuizDTO, error) {
 	quizzes := convertQuizListToQuizDTOList(*list)
 
 	return &quizzes, nil
+}
+
+func (svc *quizService) GetQuizImageByID(id QuizID) (*[]byte, error) {
+	quiz, err := svc.quizRepo.GetQuizByID(id)
+
+	if err != nil {
+		//TODO handle error
+		return nil, err
+	}
+
+	image, err := svc.imageRepo.GetImageByID(quiz.ImageFilename)
+
+	if err != nil {
+		//TODO handle error
+		return nil, err
+	}
+
+	return image, nil
 }
