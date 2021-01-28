@@ -20,7 +20,7 @@ func main() {
 
 	categoryRepo := storage.NewCategoryPostgresRepository()
 	quizRepo := storage.NewQuizPostgresRepository()
-	imageRepo := storage.NewImageFSRepository("/home/rcmendes/git-projects/learnify/images")
+	imageRepo := storage.NewImageFSRepository("/home/rcmendes/git-projects/learnify/images/data")
 	controllers.Load(app, categoryRepo, quizRepo, imageRepo)
 
 	gameRepo := gameStorage.NewGamePostgresRepository()

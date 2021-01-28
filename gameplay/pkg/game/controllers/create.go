@@ -28,11 +28,11 @@ func (ctrl *GameController) CreateGame(c *fiber.Ctx) error {
 
 	// id, err := ctrl.uc.Create(request.Category, request.Quizzes)
 
-	if err != nil {
-		//TODO Handle Error
-		return fiber.ErrInternalServerError
-	}
+	// if err != nil {
+	// 	//TODO Handle Error
+	// 	return fiber.ErrInternalServerError
+	// }
 
 	//TODO replace for a struct and a 201
-	return c.SendString.Category).String())
+	return c.SendString(request.Category)
 }

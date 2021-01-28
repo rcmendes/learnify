@@ -1,7 +1,8 @@
 package services
 
 import (
-	"errors"
+	"path/filepath"
+	"strings"
 
 	"github.com/google/uuid"
 	"github.com/rcmendes/learnify/gameplay/internal/storage"
@@ -9,16 +10,25 @@ import (
 
 //QuizDTO defines the data returned when fetching a Quiz entity.
 type QuizDTO struct {
-	ID            uuid.UUID `json:"uuid"`
-	Category      string    `json:"category"`
-	Palavra       string    `json:"palavra"`
-	Mot           string    `json:"mot"`
-	ImageURL      string    `json:"image_url"`
-	AudioURL      string    `json:"audio_url"`
-	audioFilename string
-	imageFilename string
+	ID       uuid.UUID `json:"uuid"`
+	Category string    `json:"category"`
+	Palavra  string    `json:"palavra"`
+	Mot      string    `json:"mot"`
 }
 
+type ImageKind byte
+
+const UnknownImageKind ImageKind = 0
+const PngImageKind ImageKind = 1
+const JpegImageKind ImageKind = 2
+const GifImageKind ImageKind = 3
+
+type ImageData struct {
+	Data []byte
+	Kind ImageKind
+}
+
+//QuizID defines the type of the ID of a Quiz.
 type QuizID = uuid.UUID
 
 //QuizService defines the contract of functions provided by a Quiz service.
@@ -26,30 +36,8 @@ type QuizService interface {
 	ListAll() (*[]QuizDTO, error)
 	ListQuizzesByCategory(category string) (*[]QuizDTO, error)
 	GetQuizByID(id QuizID) (*QuizDTO, error)
-	GetQuizImageByID(id QuizID) (*[]byte, error)
+	GetQuizImageByID(id QuizID) (*ImageData, error)
 	FindQuizzesSameCategory(id QuizID) (*[]QuizDTO, error)
-}
-
-//BuildImageURL build the QuizDTO image URL from the contextPath.
-func (dto *QuizDTO) BuildImageURL(contextPath string) error {
-	//TODO create a typed error
-	if dto.imageFilename == "" {
-		return errors.New("Image was not defined")
-	}
-	dto.ImageURL = contextPath + dto.ID.String() + "/image"
-
-	return nil
-}
-
-//BuildAudioURL build the QuizDTO audio URL from the contextPath.
-func (dto *QuizDTO) BuildAudioURL(contextPath string) error {
-	//TODO create a typed error
-	if dto.audioFilename == "" {
-		return errors.New("Audio was not defined")
-	}
-	dto.AudioURL = contextPath + dto.ID.String() + "/image"
-
-	return nil
 }
 
 type quizService struct {
@@ -59,12 +47,10 @@ type quizService struct {
 
 func buildQuizDTOFrom(quiz storage.Quiz) QuizDTO {
 	return QuizDTO{
-		ID:            quiz.ID,
-		imageFilename: quiz.ImageFilename,
-		Category:      quiz.Category,
-		Palavra:       quiz.Palavra,
-		Mot:           quiz.Mot,
-		audioFilename: quiz.AudioFilename,
+		ID:       quiz.ID,
+		Category: quiz.Category,
+		Palavra:  quiz.Palavra,
+		Mot:      quiz.Mot,
 	}
 }
 
@@ -136,7 +122,7 @@ func (svc *quizService) FindQuizzesSameCategory(id QuizID) (*[]QuizDTO, error) {
 	return &quizzes, nil
 }
 
-func (svc *quizService) GetQuizImageByID(id QuizID) (*[]byte, error) {
+func (svc *quizService) GetQuizImageByID(id QuizID) (*ImageData, error) {
 	quiz, err := svc.quizRepo.GetQuizByID(id)
 
 	if err != nil {
@@ -144,12 +130,40 @@ func (svc *quizService) GetQuizImageByID(id QuizID) (*[]byte, error) {
 		return nil, err
 	}
 
-	image, err := svc.imageRepo.GetImageByID(quiz.ImageFilename)
+	image, err := svc.imageRepo.GetImageByFilename(quiz.ImageFilename)
+
+	extension := filepath.Ext(quiz.ImageFilename)
+	imageKind := imageKindFromExtension(extension)
 
 	if err != nil {
 		//TODO handle error
 		return nil, err
 	}
 
-	return image, nil
+	return &ImageData{
+		Data: *image,
+		Kind: imageKind,
+	}, nil
+}
+
+func imageKindFromExtension(extension string) ImageKind {
+	if strings.Index(extension, ".") == 0 {
+		extension = extension[1:]
+	}
+
+	extension = strings.ToLower(extension)
+
+	if extension == "png" {
+		return PngImageKind
+	}
+
+	if extension == "jpg" || extension == "jpeg" {
+		return JpegImageKind
+	}
+
+	if extension == "gif" {
+		return GifImageKind
+	}
+
+	return UnknownImageKind
 }
