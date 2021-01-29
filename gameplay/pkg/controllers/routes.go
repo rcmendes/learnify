@@ -6,9 +6,9 @@ import (
 )
 
 //Load sets all the endpoints on the application.
-func Load(app *fiber.App, categoryRepo storage.CategoryRepository, quizRepo storage.QuizRepository, imageRepo storage.ImageRepository) {
+func Load(app *fiber.App, categoryRepo storage.CategoryRepository, quizRepo storage.QuizRepository, imageRepo storage.ImageRepository, audioRepo storage.AudioRepository) {
 	app.Get("/status", Status)
 
 	loadCategoriesEndpoints(app, categoryRepo)
-	loadQuizzesEndpoints(app, quizRepo, imageRepo)
+	loadQuizzesEndpoints(app, quizRepo, imageRepo, audioRepo)
 }

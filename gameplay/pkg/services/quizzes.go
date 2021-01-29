@@ -16,6 +16,8 @@ type QuizDTO struct {
 	Mot      string    `json:"mot"`
 }
 
+//TODO Move this image and audio kind to core (entities)
+
 type ImageKind byte
 
 const UnknownImageKind ImageKind = 0
@@ -28,6 +30,17 @@ type ImageData struct {
 	Kind ImageKind
 }
 
+type AudioKind byte
+
+const UnknownAudioKind AudioKind = 0
+const Mp3AudioKind AudioKind = 1
+const OggAudioKind AudioKind = 2
+
+type AudioData struct {
+	Data []byte
+	Kind AudioKind
+}
+
 //QuizID defines the type of the ID of a Quiz.
 type QuizID = uuid.UUID
 
@@ -37,12 +50,14 @@ type QuizService interface {
 	ListQuizzesByCategory(category string) (*[]QuizDTO, error)
 	GetQuizByID(id QuizID) (*QuizDTO, error)
 	GetQuizImageByID(id QuizID) (*ImageData, error)
+	GetQuizAudioByID(id QuizID) (*AudioData, error)
 	FindQuizzesSameCategory(id QuizID) (*[]QuizDTO, error)
 }
 
 type quizService struct {
 	quizRepo  storage.QuizRepository
 	imageRepo storage.ImageRepository
+	audioRepo storage.AudioRepository
 }
 
 func buildQuizDTOFrom(quiz storage.Quiz) QuizDTO {
@@ -57,10 +72,16 @@ func buildQuizDTOFrom(quiz storage.Quiz) QuizDTO {
 //TODO Handle errors or create custom ones.
 
 //NewQuizService creates a Quiz service instance.
-func NewQuizService(quizRepo storage.QuizRepository, imageRepo storage.ImageRepository) QuizService {
+func NewQuizService(
+	quizRepo storage.QuizRepository,
+	imageRepo storage.ImageRepository,
+	audioRepo storage.AudioRepository,
+) QuizService {
+
 	return &quizService{
 		quizRepo,
 		imageRepo,
+		audioRepo,
 	}
 }
 
@@ -146,6 +167,30 @@ func (svc *quizService) GetQuizImageByID(id QuizID) (*ImageData, error) {
 	}, nil
 }
 
+func (svc *quizService) GetQuizAudioByID(id QuizID) (*AudioData, error) {
+	quiz, err := svc.quizRepo.GetQuizByID(id)
+
+	if err != nil {
+		//TODO handle error
+		return nil, err
+	}
+
+	audio, err := svc.audioRepo.GetAudioByFilename(quiz.AudioFilename)
+
+	extension := filepath.Ext(quiz.AudioFilename)
+	audioKind := audioKindFromExtension(extension)
+
+	if err != nil {
+		//TODO handle error
+		return nil, err
+	}
+
+	return &AudioData{
+		Data: *audio,
+		Kind: audioKind,
+	}, nil
+}
+
 func imageKindFromExtension(extension string) ImageKind {
 	if strings.Index(extension, ".") == 0 {
 		extension = extension[1:]
@@ -166,4 +211,22 @@ func imageKindFromExtension(extension string) ImageKind {
 	}
 
 	return UnknownImageKind
+}
+
+func audioKindFromExtension(extension string) AudioKind {
+	if strings.Index(extension, ".") == 0 {
+		extension = extension[1:]
+	}
+
+	extension = strings.ToLower(extension)
+
+	if extension == "mp3" {
+		return Mp3AudioKind
+	}
+
+	if extension == "ogg" {
+		return OggAudioKind
+	}
+
+	return UnknownAudioKind
 }

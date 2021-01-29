@@ -19,7 +19,10 @@
 			"path": "quiz-loader"
 		},
 		{
-			"path": "images"
+			"path": "sqls"
+		},
+		{
+			"path": "assets"
 		}
 	],
 	"settings": {

@@ -7,6 +7,12 @@ import (
 	"github.com/rcmendes/learnify/gameplay/pkg/services"
 )
 
+//TODO Evaluate if QuizController as Interface realy necessary.
+//If we split presentation as external: yes.
+// Specific contracts for the ports and framework agnostic
+
+//TODO Evaluate the usage of Context for managing cancelling request for example.
+
 //QuizController defines the endpoints of a Quiz controller.
 type QuizController interface {
 	ListAll(c *fiber.Ctx) error
@@ -14,6 +20,7 @@ type QuizController interface {
 	DeleteByID(c *fiber.Ctx) error
 	Create(c *fiber.Ctx) error
 	GetImageByID(c *fiber.Ctx) error
+	GetAudioByID(c *fiber.Ctx) error
 }
 
 type quizController struct {
@@ -22,14 +29,19 @@ type quizController struct {
 
 //TODO Handle errors
 
-func loadQuizzesEndpoints(app *fiber.App, quizRepo storage.QuizRepository, imageRepo storage.ImageRepository) {
-	quizSrv := services.NewQuizService(quizRepo, imageRepo)
+func loadQuizzesEndpoints(
+	app *fiber.App, quizRepo storage.QuizRepository,
+	imageRepo storage.ImageRepository,
+	audioRepo storage.AudioRepository,
+) {
+	quizSrv := services.NewQuizService(quizRepo, imageRepo, audioRepo)
 	quizzesController := NewQuizController(quizSrv)
 	quizzesGroup := app.Group("/quizzes")
 	// quizzesGroup.Post("/", quizzesController.Create)
 	quizzesGroup.Get("/", quizzesController.ListAll)
 	quizzesGroup.Get("/:uuid", quizzesController.FindOneByID)
 	quizzesGroup.Get("/:uuid/image", quizzesController.GetImageByID)
+	quizzesGroup.Get("/:uuid/audio", quizzesController.GetAudioByID)
 	// quizzesGroup.Delete("/:uuid", quizzesController.DeleteByUUID)
 }
 
@@ -108,6 +120,31 @@ func (controller *quizController) Create(c *fiber.Ctx) error {
 	return c.SendString("Create a Quiz")
 }
 
+func (controller *quizController) GetAudioByID(c *fiber.Ctx) error {
+	//TODO handle missing or invalid data
+	uuidParam := c.Params("uuid")
+
+	uuid, err := uuidLib.Parse(uuidParam)
+	if err != nil {
+		return err
+	}
+
+	audio, err := controller.quizSrv.GetQuizAudioByID(uuid)
+	if err != nil {
+		//TODO handle error
+		return err
+	}
+
+	contentType := contentTypeFromAudioKind(audio.Kind)
+	c.Response().Header.Add("Content-type", contentType)
+
+	if _, err := c.Write(*&audio.Data); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (controller *quizController) GetImageByID(c *fiber.Ctx) error {
 	//TODO handle missing or invalid data
 	uuidParam := c.Params("uuid")
@@ -133,17 +170,29 @@ func (controller *quizController) GetImageByID(c *fiber.Ctx) error {
 	return nil
 }
 
-func contentTypeFromImageKind(king services.ImageKind) string {
-	if king == services.PngImageKind {
+func contentTypeFromImageKind(kind services.ImageKind) string {
+	if kind == services.PngImageKind {
 		return "image/png"
 	}
 
-	if king == services.JpegImageKind {
+	if kind == services.JpegImageKind {
 		return "image/jpeg"
 	}
 
-	if king == services.GifImageKind {
+	if kind == services.GifImageKind {
 		return "image/gif"
+	}
+
+	return "application/octet-stream"
+}
+
+func contentTypeFromAudioKind(kind services.AudioKind) string {
+	if kind == services.Mp3AudioKind {
+		return "audio/mpeg"
+	}
+
+	if kind == services.OggAudioKind {
+		return "audio/ogg"
 	}
 
 	return "application/octet-stream"

@@ -20,11 +20,12 @@ func main() {
 
 	categoryRepo := storage.NewCategoryPostgresRepository()
 	quizRepo := storage.NewQuizPostgresRepository()
-	imageRepo := storage.NewImageFSRepository("/home/rcmendes/git-projects/learnify/images/data")
-	controllers.Load(app, categoryRepo, quizRepo, imageRepo)
+	imageRepo := storage.NewImageFSRepository("/home/rcmendes/git-projects/learnify/assets/images")
+	audioRepo := storage.NewAudioFSRepository("/home/rcmendes/git-projects/learnify/assets/audios")
+	controllers.Load(app, categoryRepo, quizRepo, imageRepo, audioRepo)
 
 	gameRepo := gameStorage.NewGamePostgresRepository()
-	quizSrv := services.NewQuizService(quizRepo, imageRepo)
+	quizSrv := services.NewQuizService(quizRepo, imageRepo, audioRepo)
 	gameCtrl.Load(app, gameRepo, quizSrv)
 	app.Listen(":8080")
 }
