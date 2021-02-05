@@ -1,21 +1,12 @@
-package controllers
+package rest
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
+	"github.com/rcmendes/learnify/gameplay/ucs"
 )
 
-//PlayerID defines the ID of a player
-type PlayerID = uuid.UUID
-
-type createGameRequest struct {
-	Category string `json:"category"`
-	// PlayerID PlayerID
-
-}
-
 func (ctrl *GameController) CreateGame(c *fiber.Ctx) error {
-	request := new(createGameRequest)
+	request := new(ucs.CreateGameRequest)
 
 	if err := c.BodyParser(request); err != nil {
 		//TODO handle error
