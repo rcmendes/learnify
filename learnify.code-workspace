@@ -4,9 +4,6 @@
 			"path": "gameplay"
 		},
 		{
-			"path": "frontend"
-		},
-		{
 			"path": "db-migrations"
 		},
 		{
@@ -23,6 +20,9 @@
 		},
 		{
 			"path": "assets"
+		},
+		{
+			"path": "frontend"
 		}
 	],
 	"settings": {
