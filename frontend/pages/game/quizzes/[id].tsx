@@ -39,10 +39,7 @@ export default function QuizBoard({ quiz }: { quiz: Quiz }) {
                 {
                     quiz.images.map(img => (
                         <ImageBox key={img.id}>
-                            <div>
-                                <img src={img.uri} alt="description of the image" />
-                            </div>
-                            <small>{img.id}</small>
+                            <Image src={img.uri} alt="description of the image" />
                         </ImageBox>
                     ))
                 }
@@ -113,12 +110,30 @@ const ImageGrid = styled.div`
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    max-width: 1024px;
+    max-height: 748px;
+    margin: 20px;
+    border: 1px solid #7e7575;
+    border-radius: 16px;
 `
 
 const ImageBox = styled.div`
-    ::hover {
+    :hover {
         cursor: pointer;
+        -webkit-box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.5);
+        -moz-box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.5);
+        box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.5);
     };
 
-    border: 1 px solid;
+    width: 220px;
+    height: 220px;
+    margin: 10px;
+    padding: 4px;
+    border-radius: 4px;
+    `
+
+const Image = styled.img`
+    max-width: 200px;
+    max-height: 200px;
+
 `
