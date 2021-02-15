@@ -33,7 +33,7 @@ func main() {
 	findAllQuizzesUC := ucs.MakeFindAllQuizzes(quizRepo)
 	findQuizByCategoryName := ucs.MakeFindQuizByCategoryName(quizRepo)
 	// findQuizzesSameCategory := ucs.MakeFindQuizByCategoryName(quizRepo)
-
+	findQuizzesSameCategory
 	// Use Cases: Game
 	createGameUC := ucs.MakeCreateGame(gameRepo, quizRepo)
 	validateAnswerGameQuizUC := ucs.MakeValidateAnswerGameQuiz(gameRepo)
