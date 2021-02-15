@@ -2,7 +2,7 @@ import { GetStaticProps } from "next"
 
 type Category = {
     id: string;
-    title: string;
+    name: string;
     description: string;
 }
 
@@ -13,8 +13,8 @@ export default function CategoryList({ categories }: { categories: Category[] })
             <ul>
                 {
                     categories.map(category => (
-                        // <li key={category.id}><div>{category.title}</div><small>{category.description}</small></li>
-                        <li key={category.id}>{category.title}<br />{category.description}</li>
+                        // <li key={category.id}><div>{category.name}</div><small>{category.description}</small></li>
+                        <li key={category.id}>{category.name}<br />{category.description}</li>
                     ))
                 }
             </ul>
@@ -27,7 +27,7 @@ export const getStaticProps: GetStaticProps = async () => {
     for (let i = 1; i <= 10; i++) {
         categories.push({
             id: `${i}`,
-            title: `Category ${i}`,
+            name: `Category ${i}`,
             description: `Description of category ${i}`
         });
     }

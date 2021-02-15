@@ -1,4 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from "next"
+import { NextRouter, useRouter } from "next/router"
 import { Dispatch, SetStateAction, useState } from "react"
 import styled from "styled-components"
 import MessageModal from "../../../components/MessageModal"
@@ -31,8 +32,19 @@ const onSelectImage = (target: string, updateFn: Dispatch<SetStateAction<boolean
     updateFn(target == "44e420ad-c5fd-4d26-9ed5-2838f2450147");
 }
 
-export default function QuizBoard({ quiz }: { quiz: Quiz }) {
+const onCloseSuccessModal = (router: NextRouter, setSuccess: Dispatch<SetStateAction<boolean>>) => {
+    setSuccess(false);
+
+    const next_quiz = "b";
+
+    router.push(`/game/quizzes/${next_quiz}`);
+}
+
+export default function QuizBoard({ quiz, nextQuiz }: { quiz: Quiz, nextQuiz: string }) {
     const [success, setSuccess] = useState(false);
+    const router = useRouter();
+
+    const next_quiz = "b";
 
     return (
         <Container>
@@ -48,27 +60,50 @@ export default function QuizBoard({ quiz }: { quiz: Quiz }) {
             <ImageGrid>
                 {
                     quiz.images.map(img => (
-                        <ImageBox key={img.id} style={{ backgroundColor: success && img.id == quiz.audio.id ? "green" : "" }}>
-                            <Image src={img.uri} alt="description of the image" onClick={(event) => onSelectImage(img.id, setSuccess)} />
+                        <ImageBox
+                            key={img.id}
+                            style={{ backgroundColor: success && img.id == quiz.audio.id ? "green" : "" }}>
+                            <Image
+                                src={img.uri}
+                                alt="description of the image"
+                                onClick={(event) => onSelectImage(img.id, setSuccess)} />
                         </ImageBox>
                     ))
                 }
             </ImageGrid>
-            <MessageModal visible={success} setVisible={setSuccess}/>
+            <MessageModal
+                message="Parabéns, você acertou! :)"
+                visible={success}
+                onClose={() => {setSuccess(false);router.push(nextQuiz);}} />
         </Container>
     )
 }
 
+CREATE A STATE ENGINE OF THE GAMEPLAY TO MANAGE THE QUIZZES THAT SHOULD BE PRESENTED.
+THE GAME MUST RETURN THE FIRST QUIZ WHEN IT STARTS.
+THUS, IT SHOULD HAVE A VALIDATION ENDPOINT THAT EVALUATES THE USER RESPONSE OF THE QUIZ AND THEN 
+RETURN THE NEXT QUIZ ID UNTIL THE GAME FINISHES.
+
 export const getStaticProps: GetStaticProps = async ({ params }) => {
     const quizID = params.id;
+    console.log("quizID:", quizID);
 
     // const response = await fetch("http://localhost:8080/game/44e420ad-c5fd-4d26-9ed5-2838f2450147");
     // const quiz = await response.json();
 
     const quiz = quizMock;
 
+    const nextQuizMap = {
+        "a": "/game/quizzes/b",
+        "b": "/game/quizzes/c",
+        "c": "/game/quizzes/a"
+    };
+
     return {
-        props: { quiz },
+        props: {
+            quiz: quiz,
+            nextQuiz: nextQuizMap[quizID as string]
+        },
         // revalidate: 1,
     }
 
@@ -90,7 +125,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
     return {
         paths,
-        fallback: false,
+        fallback: 'blocking',
     }
 }
 

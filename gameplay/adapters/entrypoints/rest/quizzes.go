@@ -1,10 +1,9 @@
-package controllers
+package rest
 
 import (
 	"github.com/gofiber/fiber/v2"
-	uuidLib "github.com/google/uuid"
-	"github.com/rcmendes/learnify/gameplay/internal/storage"
-	"github.com/rcmendes/learnify/gameplay/pkg/services"
+	"github.com/google/uuid"
+	"github.com/rcmendes/learnify/gameplay/ucs/ports"
 )
 
 //TODO Evaluate if QuizController as Interface realy necessary.
@@ -24,26 +23,32 @@ type QuizController interface {
 }
 
 type quizController struct {
-	quizSrv services.QuizService
+	findAll            ports.FindAllQuizzes
+	findByCategoryName ports.FindQuizByCategoryName
+	findSameCategory   ports.FindQuizzesSameCategory
+}
+
+type MediaLink struct {
+	ID  uuid.UUID `json:"id"`
+	URI string    `json:"uri"`
+}
+
+//QuizDTO defines the data returned when fetching a Quiz entity.
+type QuizDTO struct {
+	ID       uuid.UUID `json:"uuid"`
+	Category string    `json:"category"`
+	Palavra  string    `json:"palavra"`
+	Mot      string    `json:"mot"`
+}
+
+//TODO Move this image and audio kind to core (entities)
+
+type AudioData struct {
+	Data []byte
+	Kind AudioKind
 }
 
 //TODO Handle errors
-
-func loadQuizzesEndpoints(
-	app *fiber.App, quizRepo storage.QuizRepository,
-	imageRepo storage.ImageRepository,
-	audioRepo storage.AudioRepository,
-) {
-	quizSrv := services.NewQuizService(quizRepo, imageRepo, audioRepo)
-	quizzesController := NewQuizController(quizSrv)
-	quizzesGroup := app.Group("/quizzes")
-	// quizzesGroup.Post("/", quizzesController.Create)
-	quizzesGroup.Get("/", quizzesController.ListAll)
-	quizzesGroup.Get("/:uuid", quizzesController.FindOneByID)
-	quizzesGroup.Get("/:uuid/image", quizzesController.GetImageByID)
-	quizzesGroup.Get("/:uuid/audio", quizzesController.GetAudioByID)
-	// quizzesGroup.Delete("/:uuid", quizzesController.DeleteByUUID)
-}
 
 func contextPath(c *fiber.Ctx) string {
 	baseURL := c.BaseURL()
@@ -53,9 +58,15 @@ func contextPath(c *fiber.Ctx) string {
 }
 
 // NewQuizController creates a Quiz controller.
-func NewQuizController(quizSrv services.QuizService) QuizController {
+func NewQuizController(
+	findAllQuizzesUC ports.FindAllQuizzes,
+	findQuizByCategoryNameUC ports.FindQuizByCategoryName,
+	findQuizzesSameCategoryUC ports.FindQuizzesSameCategory,
+) QuizController {
 	return &quizController{
-		quizSrv,
+		findAll:            findAllQuizzesUC,
+		findByCategoryName: findQuizByCategoryNameUC,
+		findSameCategory:   findQuizzesSameCategoryUC,
 	}
 }
 

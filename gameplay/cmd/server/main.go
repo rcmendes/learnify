@@ -6,10 +6,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/rcmendes/learnify/gameplay/adapters/database/postgres"
+	"github.com/rcmendes/learnify/gameplay/adapters/entrypoints/rest"
+	"github.com/rcmendes/learnify/gameplay/adapters/filesystem"
 	"github.com/rcmendes/learnify/gameplay/config/routes"
-	"github.com/rcmendes/learnify/gameplay/internal/storage"
-	"github.com/rcmendes/learnify/gameplay/pkg/controllers"
-	"github.com/rcmendes/learnify/gameplay/pkg/services"
+	"github.com/rcmendes/learnify/gameplay/ucs"
 )
 
 func main() {
@@ -18,14 +18,31 @@ func main() {
 
 	app.Use(cors.New())
 
-	categoryRepo := storage.NewCategoryPostgresRepository()
-	quizRepo := storage.NewQuizPostgresRepository()
-	imageRepo := storage.NewImageFSRepository("/home/rcmendes/git-projects/learnify/assets/images")
-	audioRepo := storage.NewAudioFSRepository("/home/rcmendes/git-projects/learnify/assets/audios")
-	controllers.Load(app, categoryRepo, quizRepo, imageRepo, audioRepo)
-
+	//Repositories
+	categoryRepo := postgres.NewCategoryPostgresRepository()
+	quizRepo := postgres.NewQuizPostgresRepository()
 	gameRepo := postgres.NewGamePostgresRepository()
-	quizSrv := services.NewQuizService(quizRepo, imageRepo, audioRepo)
-	routes.LoadGameRoutes(app, gameRepo, quizSrv)
+	imageRepo := filesystem.NewImageFSRepository("/home/rcmendes/git-projects/learnify/assets/images")
+	audioRepo := filesystem.NewAudioFSRepository("/home/rcmendes/git-projects/learnify/assets/audios")
+
+	// Use Cases: Category
+	createCategoryUC := ucs.MakeCreateCategory(categoryRepo)
+	findAllCategoriesUC := ucs.MakeFindAllCategories(categoryRepo)
+
+	// Use Cases: Quiz
+	findAllQuizzesUC := ucs.MakeFindAllQuizzes(quizRepo)
+	findQuizByCategoryName := ucs.MakeFindQuizByCategoryName(quizRepo)
+	// findQuizzesSameCategory := ucs.MakeFindQuizByCategoryName(quizRepo)
+
+	// Use Cases: Game
+	createGameUC := ucs.MakeCreateGame(gameRepo, quizRepo)
+	validateAnswerGameQuizUC := ucs.MakeValidateAnswerGameQuiz(gameRepo)
+	findOneNotPlayedGameQuizUC := ucs.MakeFindOneNotPlayedGameQuiz(gameRepo)
+
+	// Routes
+	app.Get("/status", rest.Status)
+	routes.LoadCategoriesRoutes(app, createCategoryUC, findAllCategoriesUC)
+	routes.LoadQuizzesRoutes(app, findAllQuizzesUC, findQuizByCategoryName, find)
+	routes.LoadGameRoutes(app, createGameUC, validateAnswerGameQuizUC, findOneNotPlayedGameQuizUC)
 	app.Listen(":8080")
 }

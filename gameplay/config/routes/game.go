@@ -3,18 +3,19 @@ package routes
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/rcmendes/learnify/gameplay/adapters/entrypoints/rest"
-	"github.com/rcmendes/learnify/gameplay/pkg/services"
-	"github.com/rcmendes/learnify/gameplay/ucs"
+	"github.com/rcmendes/learnify/gameplay/ucs/ports"
 )
 
-func LoadGameRoutes(app *fiber.App, gameRepo ucs.GameRepository, quizSrv services.QuizService) {
+func LoadGameRoutes(
+	app *fiber.App,
+	createGameUC ports.CreateGame,
+	validateAnswerGameQuizUC ports.ValidateAnswerGameQuiz,
+	findOneNotPlayedGameQuizUC ports.FindOneNotPlayedGameQuiz) {
 
-	ctrl := rest.NewGameController(nil)
+	ctrl := rest.NewGameController(createGameUC, validateAnswerGameQuizUC, findOneNotPlayedGameQuizUC)
 
 	gameGroup := app.Group("/game")
-	gameGroup.Post("/", ctrl.CreateGame)
-	gameGroup.Get("/:id", ctrl.GetGameByID)
-	// gameGroup.Get("/:id", gameController.ListAll)
-	// categoriesGroup.Get("/:uuid", categoriesController.FindOneByUUID)
-	// categoriesGroup.Delete("/:uuid", categoriesController.DeleteByUUID)
+	gameGroup.Post("/", ctrl.Create)
+	gameGroup.Get("/:gameID/quizzes/next", ctrl.NexQuiz)
+	gameGroup.Put("/:gameID/quizzes/:quizID/validate", ctrl.ValidateAnswer)
 }

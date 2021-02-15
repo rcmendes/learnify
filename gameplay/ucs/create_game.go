@@ -1,72 +1,61 @@
 package ucs
 
 import (
-	"github.com/rcmendes/learnify/gameplay/pkg/services"
+	"fmt"
+	"math/rand"
+
+	"github.com/google/uuid"
+	"github.com/rcmendes/learnify/gameplay/entities"
+	"github.com/rcmendes/learnify/gameplay/ucs/ports"
 )
 
-//CreateGame defines the base structure to the 'Create a Game' Use Case.
-type CreateGame struct {
-	gameRepo GameRepository
-	quizSrv  services.QuizService
+type createGame struct {
+	gameRepo ports.GameRepository
+	quizRepo ports.QuizRepository
+}
+
+func MakeCreateGame(gameRepo ports.GameRepository, quizRepo ports.QuizRepository) ports.CreateGame {
+	return &createGame{
+		gameRepo,
+		quizRepo,
+	}
 }
 
 //Create is a method that creates a game.
-func (uc *CreateGame) Create(newGame CreateGameRequest) (*CreateGameResponse, error) {
-	// category := newGame.Category
-	// quizzes := int(newGame.Quizzes)
+func (uc *createGame) Create(newGame entities.NewGameData) (*entities.GameID, error) {
+	//TODO Validate if the player exists
 
-	// quizList, err := uc.quizSrv.ListQuizzesByCategory(category)
-	// if err != nil {
-	// 	//TODO handle error
-	// 	return nil, err
-	// }
+	gameID := uuid.New()
 
-	// length := len(*quizList)
-	// if length == 0 {
-	// 	return nil, fmt.Errorf("no quiz found for this category")
-	// }
+	game := entities.NewGame(gameID, newGame.Player)
 
-	// gameQuizzes := make([]*game.GameQuiz, 0, quizzes)
+	//TODO Replace for an application parameter.
+	totalOfGameQuizzes := 4
+	category := newGame.Category
+	quizzes, err := uc.quizRepo.FindQuizByCategoryName(category.Name)
+	if err != nil {
+		//TODO handle error
+		return nil, err
+	}
 
-	// for i := 0; i < length && len(gameQuizzes) < quizzes; i++ {
-	// 	index := rand.Intn(length - 1)
-	// 	quiz := (*quizList)[index]
-	// 	if !containsQuiz(gameQuizzes, &quiz.ID) {
-	// 		gameQuizzes = append(gameQuizzes, &game.GameQuiz{QuizID: quiz.ID})
-	// 	}
-	// }
+	length := len(quizzes)
+	if length == 0 {
+		//TODO create an error for this
+		return nil, fmt.Errorf("no quiz found for this category")
+	}
 
-	// playerID, _ := uuid.Parse("2f5b6610-b714-4258-8026-3e77ac1a30a4")
+	for i := 0; i < length && i < totalOfGameQuizzes; i++ {
+		index := rand.Intn(length - 1)
+		quiz := *quizzes[index]
+		if !game.Contains(quiz.ID) {
+			game.AddQuiz(quiz)
+		}
+	}
 
-	// game := game.Game{
-	// 	Player:  playerID,
-	// 	Quizzes: gameQuizzes,
-	// 	Status:  game.StatusCreated,
-	// }
+	if err := uc.gameRepo.Insert(game); err != nil {
+		//TODO handle error
+		return nil, err
+	}
 
-	// id, err := uc.gameRepo.Insert(game)
-
-	// if err != nil {
-	// 	//TODO handle error
-	// 	return nil, err
-	// }
-
-	// response := &CreateGameResponse{
-	// 	ID: *id,
-	// }
-
-	// return response, nil
-
-	return nil, nil
+	return &gameID, nil
 }
-
-// func containsQuiz(list []*game.GameQuiz, id *uuid.UUID) bool {
-// 	for i := 0; i < len(list); i++ {
-// 		gq := list[i]
-// 		if gq.QuizID == *id {
-// 			return true
-// 		}
-// 	}
-
-// 	return false
-// }

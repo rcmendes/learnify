@@ -3,18 +3,17 @@ package models
 import (
 	"github.com/google/uuid"
 	"github.com/rcmendes/learnify/gameplay/entities"
-	"github.com/rcmendes/learnify/gameplay/internal/storage"
 )
 
-type Game struct {
-	storage.Storable
+type GameModel struct {
+	Storable
 	tableName struct{} `pg:"game"`
 	// PlayerID  uuid.UUID   `pg:"player_id"`
 	Status  uint8       `pg:"status"`
 	Quizzes []*GameQuiz //`pg:"rel:has-many"`
 }
 
-func (m *Game) Load(game entities.Game) {
+func (m *GameModel) Load(game entities.Game) {
 	m.ID = game.ID
 	// m.PlayerID = game.Player.ID
 	m.Status = game.Status
@@ -30,7 +29,7 @@ func (m *Game) Load(game entities.Game) {
 	}
 }
 
-func (m *Game) To() entities.Game {
+func (m *GameModel) To() entities.Game {
 	quizzes := make([]*entities.GameQuiz, 0, len(m.Quizzes))
 	for _, q := range m.Quizzes {
 		quiz := entities.Quiz{}

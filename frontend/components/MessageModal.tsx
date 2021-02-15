@@ -1,31 +1,37 @@
 import React, { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 
-export default function MessageModal({ visible, setVisible }) {
-    // const [visible, setVisible] = useState(false)
+type Props = {
+    message: string;
+    visible: boolean;
+    onClose: Function;
+}
+
+export default function MessageModal({ message, visible, onClose }: Props) {
+    // const [visible, onClose] = useState(false)
     const wrapperRef = useRef(null)
-    userCLickedOutsideHandler(wrapperRef, setVisible)
+    userCLickedOutsideHandler(wrapperRef, onClose)
 
     return (
         <Modal ref={wrapperRef} style={{ display: visible ? "block" : "none" }}>
 
             <ModalContent>
-                <Close onClick={() => setVisible(false)}>&times;</Close>
-                <h1>Some text in the Modal..</h1>
+                <Close onClick={() => onClose()}>&times;</Close>
+                <h1>{message}</h1>
             </ModalContent>
 
         </Modal>
     )
 }
 
-function userCLickedOutsideHandler(ref, setVisible) {
+function userCLickedOutsideHandler(ref, onClose) {
     useEffect(() => {
         /**
          * Alert if clicked on outside of element
          */
         function handleClickOutside(event) {
             if (ref.current && !ref.current.contains(event.target)) {
-                setVisible(false)
+                onClose()
             }
         }
 
@@ -48,8 +54,9 @@ const Modal = styled.div`
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
+    //background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    color: #00AA00;
 `
 
 /* Modal Content/Box */

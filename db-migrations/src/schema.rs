@@ -2,7 +2,7 @@ table! {
     categories (id) {
         id -> Int4,
         uuid -> Uuid,
-        title -> Varchar,
+        name -> Varchar,
         description -> Nullable<Varchar>,
         created_at -> Timestamp,
         updated_at -> Nullable<Timestamp>,
@@ -13,7 +13,7 @@ table! {
     tb_categories (id) {
         id -> Int4,
         uuid -> Uuid,
-        title -> Varchar,
+        name -> Varchar,
         description -> Nullable<Varchar>,
         created_at -> Timestamp,
         updated_at -> Nullable<Timestamp>,

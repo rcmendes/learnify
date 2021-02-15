@@ -1,19 +1,11 @@
-package storage
+package filesystem
 
 import (
 	"io/ioutil"
 	"path/filepath"
+
+	"github.com/rcmendes/learnify/gameplay/ucs/ports"
 )
-
-//ImageRepository defines the contract of an Image Repository.
-type ImageRepository interface {
-	GetImageByFilename(filename string) (*[]byte, error)
-}
-
-//AudioRepository defines the contract of an Audio Repository.
-type AudioRepository interface {
-	GetAudioByFilename(filename string) (*[]byte, error)
-}
 
 type imageFSRepository struct {
 	basePath string
@@ -26,12 +18,12 @@ type audioFSRepository struct {
 //TODO Customize errors
 
 // NewImageFSRepository creates a File System based Image repository instance.
-func NewImageFSRepository(basePath string) ImageRepository {
+func NewImageFSRepository(basePath string) ports.ImageRepository {
 	return &imageFSRepository{basePath: basePath}
 }
 
 // NewAudioFSRepository creates a File System based Audio repository instance.
-func NewAudioFSRepository(basePath string) AudioRepository {
+func NewAudioFSRepository(basePath string) ports.AudioRepository {
 	return &audioFSRepository{basePath: basePath}
 }
 
