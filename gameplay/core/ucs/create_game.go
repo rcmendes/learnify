@@ -5,8 +5,8 @@ import (
 	"math/rand"
 
 	"github.com/google/uuid"
-	"github.com/rcmendes/learnify/gameplay/entities"
-	"github.com/rcmendes/learnify/gameplay/ucs/ports"
+	"github.com/rcmendes/learnify/gameplay/core/entities"
+	"github.com/rcmendes/learnify/gameplay/core/ucs/ports"
 )
 
 type createGame struct {
@@ -27,11 +27,11 @@ func (uc *createGame) Create(newGame entities.NewGameData) (*entities.GameID, er
 
 	gameID := uuid.New()
 
-	game := entities.NewGame(gameID, newGame.Player)
+	game := entities.NewGame(gameID, entities.NewPlayer(newGame.PlayerID))
 
 	//TODO Replace for an application parameter.
 	totalOfGameQuizzes := 4
-	category := newGame.Category
+	category := entities.Category{ID: newGame.CategoryID}
 	quizzes, err := uc.quizRepo.FindQuizByCategoryName(category.Name)
 	if err != nil {
 		//TODO handle error

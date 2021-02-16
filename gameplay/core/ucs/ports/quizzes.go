@@ -1,8 +1,6 @@
 package ports
 
-import (
-	"github.com/rcmendes/learnify/gameplay/entities"
-)
+import "github.com/rcmendes/learnify/gameplay/core/entities"
 
 //QuizRepository defines the contract of a Quiz entity repository.
 type QuizRepository interface {
@@ -26,6 +24,6 @@ type FindQuizzesSameCategory interface {
 
 type FindQuiz interface {
 	FindByID(id entities.QuizID) (*entities.Quiz, error)
-	GetImageByID(id entities.QuizID, loadData bool) (*entities.MediaInfo, error)
-	GetAudioByID(id entities.QuizID, loadData bool) (*entities.MediaInfo, error)
+	GetImageByID(id entities.QuizID) (*entities.MediaInfo, error)
+	GetAudioByID(id entities.QuizID) (*entities.MediaInfo, error)
 }

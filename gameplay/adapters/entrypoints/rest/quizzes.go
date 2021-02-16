@@ -3,12 +3,9 @@ package rest
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
-	"github.com/rcmendes/learnify/gameplay/ucs/ports"
+	"github.com/rcmendes/learnify/gameplay/core/entities"
+	"github.com/rcmendes/learnify/gameplay/core/ucs/ports"
 )
-
-//TODO Evaluate if QuizController as Interface realy necessary.
-//If we split presentation as external: yes.
-// Specific contracts for the ports and framework agnostic
 
 //TODO Evaluate the usage of Context for managing cancelling request for example.
 
@@ -25,12 +22,20 @@ type QuizController interface {
 type quizController struct {
 	findAll            ports.FindAllQuizzes
 	findByCategoryName ports.FindQuizByCategoryName
-	findSameCategory   ports.FindQuizzesSameCategory
+	findQuiz           ports.FindQuiz
 }
 
-type MediaLink struct {
-	ID  uuid.UUID `json:"id"`
-	URI string    `json:"uri"`
+// NewQuizController creates a Quiz controller.
+func NewQuizController(
+	findAllQuizzesUC ports.FindAllQuizzes,
+	findQuizByCategoryNameUC ports.FindQuizByCategoryName,
+	findQuizUC ports.FindQuiz,
+) QuizController {
+	return &quizController{
+		findAll:            findAllQuizzesUC,
+		findByCategoryName: findQuizByCategoryNameUC,
+		findQuiz:           findQuizUC,
+	}
 }
 
 //QuizDTO defines the data returned when fetching a Quiz entity.
@@ -41,11 +46,13 @@ type QuizDTO struct {
 	Mot      string    `json:"mot"`
 }
 
-//TODO Move this image and audio kind to core (entities)
-
-type AudioData struct {
-	Data []byte
-	Kind AudioKind
+func NewQuizDTO(q *entities.Quiz) *QuizDTO {
+	return &QuizDTO{
+		ID:       q.ID,
+		Category: q.Category,
+		Palavra:  q.Palavra,
+		Mot:      q.Mot,
+	}
 }
 
 //TODO Handle errors
@@ -57,50 +64,43 @@ func contextPath(c *fiber.Ctx) string {
 	return baseURL + context + "/"
 }
 
-// NewQuizController creates a Quiz controller.
-func NewQuizController(
-	findAllQuizzesUC ports.FindAllQuizzes,
-	findQuizByCategoryNameUC ports.FindQuizByCategoryName,
-	findQuizzesSameCategoryUC ports.FindQuizzesSameCategory,
-) QuizController {
-	return &quizController{
-		findAll:            findAllQuizzesUC,
-		findByCategoryName: findQuizByCategoryNameUC,
-		findSameCategory:   findQuizzesSameCategoryUC,
-	}
-}
-
 func (controller *quizController) ListAll(c *fiber.Ctx) error {
 	category := c.Query("category", "")
 
-	var quizzes *[]services.QuizDTO
 	var err error
+	var quizzes entities.QuizList
 	if category == "" {
-		quizzes, err = controller.quizSrv.ListAll()
+		quizzes, err = controller.findAll.FindAll()
 		if err != nil {
 			return err
 		}
-
 	} else {
-		quizzes, err = controller.quizSrv.ListQuizzesByCategory(category)
+		quizzes, err = controller.findByCategoryName.FindByCategoryName(category)
 	}
+
 	if err != nil {
 		return err
 	}
 
-	return c.JSON(quizzes)
+	var list []*QuizDTO
+	for _, q := range quizzes {
+		list = append(list, NewQuizDTO(q))
+	}
+
+	return c.JSON(list)
 }
 
 func (controller *quizController) FindOneByID(c *fiber.Ctx) error {
 	//TODO handle missing or invalid data
-	uuidParam := c.Params("uuid")
+	idParam := c.Params("id")
 
-	uuid, err := uuidLib.FromBytes([]byte(uuidParam))
+	id, err := uuid.Parse(idParam)
 	if err != nil {
+		//TODO Handle error
 		return err
 	}
 
-	quiz, err := controller.quizSrv.GetQuizByID(uuid)
+	quiz, err := controller.findQuiz.FindByID(id)
 	if err != nil {
 		//TODO handle error
 		return err
@@ -133,23 +133,23 @@ func (controller *quizController) Create(c *fiber.Ctx) error {
 
 func (controller *quizController) GetAudioByID(c *fiber.Ctx) error {
 	//TODO handle missing or invalid data
-	uuidParam := c.Params("uuid")
+	idParam := c.Params("id")
 
-	uuid, err := uuidLib.Parse(uuidParam)
+	id, err := uuid.Parse(idParam)
 	if err != nil {
 		return err
 	}
 
-	audio, err := controller.quizSrv.GetQuizAudioByID(uuid)
+	audio, err := controller.findQuiz.GetAudioByID(id)
 	if err != nil {
 		//TODO handle error
 		return err
 	}
 
-	contentType := contentTypeFromAudioKind(audio.Kind)
+	contentType := contentTypeFromAudio(audio)
 	c.Response().Header.Add("Content-type", contentType)
 
-	if _, err := c.Write(*&audio.Data); err != nil {
+	if _, err := c.Write(*audio.Data); err != nil {
 		return err
 	}
 
@@ -158,51 +158,51 @@ func (controller *quizController) GetAudioByID(c *fiber.Ctx) error {
 
 func (controller *quizController) GetImageByID(c *fiber.Ctx) error {
 	//TODO handle missing or invalid data
-	uuidParam := c.Params("uuid")
+	idParam := c.Params("id")
 
-	uuid, err := uuidLib.Parse(uuidParam)
+	id, err := uuid.Parse(idParam)
 	if err != nil {
 		return err
 	}
 
-	image, err := controller.quizSrv.GetQuizImageByID(uuid)
+	image, err := controller.findQuiz.GetImageByID(id)
 	if err != nil {
 		//TODO handle error
 		return err
 	}
 
-	contentType := contentTypeFromImageKind(image.Kind)
+	contentType := contentTypeFromImage(image)
 	c.Response().Header.Add("Content-type", contentType)
 
-	if _, err := c.Write(*&image.Data); err != nil {
+	if _, err := c.Write(*image.Data); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func contentTypeFromImageKind(kind services.ImageKind) string {
-	if kind == services.PngImageKind {
+func contentTypeFromImage(image *entities.MediaInfo) string {
+	if image.Png() {
 		return "image/png"
 	}
 
-	if kind == services.JpegImageKind {
+	if image.Jpeg() {
 		return "image/jpeg"
 	}
 
-	if kind == services.GifImageKind {
+	if image.Gif() {
 		return "image/gif"
 	}
 
 	return "application/octet-stream"
 }
 
-func contentTypeFromAudioKind(kind services.AudioKind) string {
-	if kind == services.Mp3AudioKind {
+func contentTypeFromAudio(audio *entities.MediaInfo) string {
+	if audio.Mp3() {
 		return "audio/mpeg"
 	}
 
-	if kind == services.OggAudioKind {
+	if audio.Ogg() {
 		return "audio/ogg"
 	}
 

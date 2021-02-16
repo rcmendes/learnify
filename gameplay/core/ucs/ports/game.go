@@ -1,8 +1,6 @@
 package ports
 
-import (
-	"github.com/rcmendes/learnify/gameplay/entities"
-)
+import "github.com/rcmendes/learnify/gameplay/core/entities"
 
 type GameRepository interface {
 	Insert(game entities.Game) error

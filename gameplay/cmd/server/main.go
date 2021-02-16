@@ -5,11 +5,11 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/rcmendes/learnify/gameplay/adapters/database/postgres"
 	"github.com/rcmendes/learnify/gameplay/adapters/entrypoints/rest"
-	"github.com/rcmendes/learnify/gameplay/adapters/filesystem"
+	"github.com/rcmendes/learnify/gameplay/adapters/repository/filesystem"
+	"github.com/rcmendes/learnify/gameplay/adapters/repository/postgres"
 	"github.com/rcmendes/learnify/gameplay/config/routes"
-	"github.com/rcmendes/learnify/gameplay/ucs"
+	"github.com/rcmendes/learnify/gameplay/core/ucs"
 )
 
 func main() {
@@ -32,8 +32,7 @@ func main() {
 	// Use Cases: Quiz
 	findAllQuizzesUC := ucs.MakeFindAllQuizzes(quizRepo)
 	findQuizByCategoryName := ucs.MakeFindQuizByCategoryName(quizRepo)
-	// findQuizzesSameCategory := ucs.MakeFindQuizByCategoryName(quizRepo)
-	findQuizzesSameCategory
+	findQuiz := ucs.MakeFindQuiz(quizRepo, imageRepo, audioRepo)
 	// Use Cases: Game
 	createGameUC := ucs.MakeCreateGame(gameRepo, quizRepo)
 	validateAnswerGameQuizUC := ucs.MakeValidateAnswerGameQuiz(gameRepo)
@@ -42,7 +41,7 @@ func main() {
 	// Routes
 	app.Get("/status", rest.Status)
 	routes.LoadCategoriesRoutes(app, createCategoryUC, findAllCategoriesUC)
-	routes.LoadQuizzesRoutes(app, findAllQuizzesUC, findQuizByCategoryName, find)
+	routes.LoadQuizzesRoutes(app, findAllQuizzesUC, findQuizByCategoryName, findQuiz)
 	routes.LoadGameRoutes(app, createGameUC, validateAnswerGameQuizUC, findOneNotPlayedGameQuizUC)
 	app.Listen(":8080")
 }

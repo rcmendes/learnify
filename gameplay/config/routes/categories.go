@@ -3,7 +3,7 @@ package routes
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/rcmendes/learnify/gameplay/adapters/entrypoints/rest"
-	"github.com/rcmendes/learnify/gameplay/ucs/ports"
+	"github.com/rcmendes/learnify/gameplay/core/ucs/ports"
 )
 
 func LoadCategoriesRoutes(
