@@ -1,9 +1,6 @@
 {
 	"folders": [
 		{
-			"path": "gameplay"
-		},
-		{
 			"path": "db-migrations"
 		},
 		{
@@ -23,6 +20,9 @@
 		},
 		{
 			"path": "frontend"
+		},
+		{
+			"path": "../gameplay"
 		}
 	],
 	"settings": {
