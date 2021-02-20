@@ -22,7 +22,7 @@
 			"path": "frontend"
 		},
 		{
-			"path": "../gameplay"
+			"path": "gameplay"
 		}
 	],
 	"settings": {
