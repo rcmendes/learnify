@@ -1,0 +1,14 @@
+[package]
+name = "image-downloader"
+version = "0.1.0"
+authors = ["rcmendes"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+file-downloader = { path = "../file-downloader" }
+tokio = { version = "0.2", features = ["full"] }
+csv = "1.1.4"
+serde = { version = "1.0", features = ["derive"] }
+url = "2.2.0"

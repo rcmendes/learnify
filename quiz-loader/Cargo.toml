@@ -1,0 +1,3 @@
+[workspace]
+
+members = ["image-downloader", "file-downloader"]

@@ -1,0 +1,8 @@
+[workspace]
+name = "image-downloader"
+version = "0.1.0"
+authors = ["rcmendes"]
+edition = "2018"
+
+
+members = ["classroom", "core", "learnify"]

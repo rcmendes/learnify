@@ -1,0 +1,31 @@
+{
+	"folders": [
+		{
+			"path": "gameplay"
+		},
+		{
+			"path": "db-migrations"
+		},
+		{
+			"path": "docker"
+		},
+		{
+			"path": "text2mp3"
+		},
+		{
+			"path": "quiz-loader"
+		},
+		{
+			"path": "sqls"
+		},
+		{
+			"path": "assets"
+		},
+		{
+			"path": "frontend"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
+}

@@ -1,0 +1,31 @@
+[package]
+name = "db-migrations"
+version = "0.1.0"
+authors = ["rcmendes"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "catalog_csv_reader"
+path = "src/lib.rs"
+
+# [[bin]]
+# name = "db-migrations"
+# path = "src/main.rs"
+
+# [workspace]
+
+# members = [
+#     "classroom",
+#     "core",
+#     "learnify"
+# ]
+
+[dependencies]
+csv = "1.1.4"
+dotenv = "0.15.0"
+tokio = { version = "0.3.4", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+diesel = { version = "1.4.5", features = ["postgres", "r2d2"] }
+# serde_json = "1.0.59"
+chrono = { version = "0.4.19", features = ["serde"] }
